@@ -2,31 +2,36 @@
 
 Continuing my **Master in Blockchain Development** at **Blockchain Accelerator Academy**, this project explores **Composability** and advanced **Authentication Patterns** in the EVM.
 
-As a **Java Software Engineer**, I am accustomed to managing complex call chains. In this project, I implemented a modular architecture where contracts interact via interfaces, and I tackled the challenge of identifying the *original* user across multiple contract calls.
+As a **Java Software Engineer**, I am accustomed to building decoupled systems. In this project, I applied **Modular Architecture** principles to Solidity, creating a system where contracts interact via interfaces while maintaining secure access control across the call chain.
 
 ## 💡 Project Overview
 
-The system creates a separation of concerns between Logic and Storage:
+The system creates a clear separation of concerns between Logic and Storage:
 
 1.  **`Result.sol` (The Database):** Stores the state and permission logic.
-2.  **`Adder.sol` (The Controller):** executes the addition logic and calls `Result` to save data.
-3.  **`IResult.sol` (The Interface):** Defines the contract ABI for interaction.
+2.  **`Adder.sol` (The Controller):** Executes the addition logic and calls `Result` to save data.
+3.  **`IResult.sol` (The Interface):** Defines the contract ABI, acting as the bridge between Logic and Storage.
 
 ### 🔍 Key Technical Features:
 
+* **Modular Architecture:**
+    * Instead of a monolithic contract, I separated the system into layers. `Adder.sol` handles the calculation (Logic), while `Result.sol` handles the persistence (Storage). This mimics the separation of concerns often seen in backend development.
+
 * **Global Transaction Origin (`tx.origin`):**
-    * [cite_start]I implemented authentication using `tx.origin` instead of `msg.sender`[cite: 4].
-    * **The Problem:** When `Adder` calls `Result`, the `msg.sender` seen by `Result` is the `Adder` contract, not the Admin.
-    * [cite_start]**The Solution:** By checking `tx.origin`, the `Result` contract verifies who *initiated* the transaction chain, allowing the Admin to execute restricted functions (like `setFee`) even when calling through the `Adder` contract[cite: 4, 28].
-* [cite_start]**Interface-Based Interaction:** usage of `IResult(address)` to decouple implementation from definition[cite: 25, 28].
-* [cite_start]**Modifiers for Access Control:** The `onlyAdmin` modifier acts as a guard, ensuring only the original transaction signer can alter sensitive state variables like `fee` or `admin`[cite: 4, 7, 9].
+    * I implemented authentication using `tx.origin` instead of the standard `msg.sender`.
+    * **The Problem:** When `Adder` calls `Result`, the `msg.sender` seen by `Result` is the `Adder` contract address, not the Admin's wallet. This would normally block the Admin from executing restricted functions through the logic contract.
+    * **The Solution:** By checking `tx.origin` in the `onlyAdmin` modifier, the Storage contract verifies who *initiated* the transaction chain. This allows the Admin to execute functions (like `setFee`) via the `Adder` contract without losing privileges.
+
+* **Interface-Based Interaction:**
+    * Usage of `IResult(address)` to decouple the implementation from the definition, allowing the `Adder` contract to interact with any contract that adheres to the `IResult` structure.
 
 ## 🛠️ Stack & Tools
 
 * **Language:** Solidity `^0.8.24`
 * **Architecture:** Modular (Logic/State separation)
-* **Security Concepts:** `tx.origin` vs `msg.sender`, Access Control.
+* **Security Patterns:** `tx.origin` for ownership validation in call chains.
+* **License:** LGPL-3.0-only
 
 ---
 
-*This project demonstrates how to maintain identity context across a chain of smart contract interactions.*
+*This project demonstrates how to maintain identity context and security across a chain of smart contract interactions.*
