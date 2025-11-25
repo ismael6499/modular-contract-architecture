@@ -1,37 +1,37 @@
-# 🔗 Connected Smart Contracts: Inter-Contract Communication & Auth Patterns
+# 🔗 Connected Smart Contracts: Modular Architecture & Security Patterns
 
-Continuing my **Master in Blockchain Development** at **Blockchain Accelerator Academy**, this project explores **Composability** and advanced **Authentication Patterns** in the EVM.
+A reference implementation of composable smart contract architecture, focusing on the separation of **Logic** and **Storage** layers while enforcing secure cross-contract authentication.
 
-As a **Java Software Engineer**, I am accustomed to building decoupled systems. In this project, I applied **Modular Architecture** principles to Solidity, creating a system where contracts interact via interfaces while maintaining secure access control across the call chain.
+## 🚀 Engineering Context
+
+As a **Java Software Engineer**, building decoupled systems using Interfaces and Dependency Injection is standard practice to ensure maintainability. In **Solidity**, this concept translates to **Composability**, but introduces unique security challenges regarding identity propagation.
+
+This project applies **Modular Architecture** principles to the EVM, demonstrating how to decouple Business Logic (`Adder`) from Persistence (`Result`) using strictly defined ABIs, while navigating the security nuances of call chains.
 
 ## 💡 Project Overview
 
-The system creates a clear separation of concerns between Logic and Storage:
+The system architecture implements a separation of concerns pattern:
 
-1.  **`Result.sol` (The Database):** Stores the state and permission logic.
-2.  **`Adder.sol` (The Controller):** Executes the addition logic and calls `Result` to save data.
-3.  **`IResult.sol` (The Interface):** Defines the contract ABI, acting as the bridge between Logic and Storage.
+1.  **Persistence Layer (`Result.sol`):** Acts as the database, holding state and permission logic.
+2.  **Logic Layer (`Adder.sol`):** Acts as the controller, executing arithmetic logic and interacting with the persistence layer.
+3.  **Abstraction Layer (`IResult.sol`):** Defines the Interface (ABI), enabling loose coupling between components.
 
 ### 🔍 Key Technical Features:
 
-* **Modular Architecture:**
-    * Instead of a monolithic contract, I separated the system into layers. `Adder.sol` handles the calculation (Logic), while `Result.sol` handles the persistence (Storage). This mimics the separation of concerns often seen in backend development.
-
-* **Global Transaction Origin (`tx.origin`):**
-    * I implemented authentication using `tx.origin` instead of the standard `msg.sender`.
-    * **The Problem:** When `Adder` calls `Result`, the `msg.sender` seen by `Result` is the `Adder` contract address, not the Admin's wallet. This would normally block the Admin from executing restricted functions through the logic contract.
-    * **The Solution:** By checking `tx.origin` in the `onlyAdmin` modifier, the Storage contract verifies who *initiated* the transaction chain. This allows the Admin to execute functions (like `setFee`) via the `Adder` contract without losing privileges.
+* **Security & Phishing Mitigation (`msg.sender` vs `tx.origin`):**
+    * **Threat Model:** While `tx.origin` is convenient for authorizing the original transaction signer across multiple calls, it introduces a critical **Phishing Vulnerability** (contracts can be tricked into acting on behalf of a user via a malicious intermediary).
+    * **Architecture Decision:** I implemented a **Zero Trust** security model relying strictly on `msg.sender`. The Storage contract explicitly authorizes the Logic contract's address, ensuring that access is granted based on *immediate caller identity*, effectively neutralizing phishing vectors.
 
 * **Interface-Based Interaction:**
-    * Usage of `IResult(address)` to decouple the implementation from the definition, allowing the `Adder` contract to interact with any contract that adheres to the `IResult` structure.
+    * Utilization of `IResult(address)` to decouple implementation from definition. The `Adder` contract interacts with `Result` purely through its interface. This pattern is the precursor to upgradeable proxy patterns, allowing logic to change without altering the interface or storage structure.
 
 ## 🛠️ Stack & Tools
 
-* **Language:** Solidity `^0.8.24`
-* **Architecture:** Modular (Logic/State separation)
-* **Security Patterns:** `tx.origin` for ownership validation in call chains.
-* **License:** LGPL-3.0-only
+* **Language:** Solidity `^0.8.24`.
+* **Architecture:** Modular (Logic/Storage Separation).
+* **Security:** Access Control, Phishing Prevention (CWE-115 Mitigation).
+* **License:** LGPL-3.0-only.
 
 ---
 
-*This project demonstrates how to maintain identity context and security across a chain of smart contract interactions.*
+*This project demonstrates how to maintain system modularity without compromising the security of the call stack.*
