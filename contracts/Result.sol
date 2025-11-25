@@ -1,49 +1,25 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 pragma solidity 0.8.24;
 
-/// @title Result Storage
+import "./interfaces/IResult.sol";
+
+/// @title Adder Logic
 /// @author Agustin Acosta
-/// @notice Stores calculation results and manages administrative settings
-contract Result {
+/// @notice Performs addition and updates the Result contract
+contract Adder {
     
-    error NotAuthorized(address caller);
     error InvalidAddress();
 
-    uint256 public result;
-    address public admin;
-    uint256 public fee;
+    address public resultAddress;
 
-    event ResultUpdated(uint256 newValue);
-    event FeeUpdated(uint256 newFee);
-    event AdminUpdated(address newAdmin);
-
-    modifier onlyAdmin() {
-        // SECURITY FIX: Replaced tx.origin with msg.sender to prevent phishing
-        if (msg.sender != admin) {
-            revert NotAuthorized(msg.sender);
-        }
-        _;
+    constructor(address _resultAddress) {
+        if (_resultAddress == address(0)) revert InvalidAddress();
+        resultAddress = _resultAddress;
     }
 
-    constructor(address _admin) {
-        if (_admin == address(0)) revert InvalidAddress();
-        admin = _admin;
-        fee = 5;
-    }
-
-    function setResultado(uint256 _num) external {
-        result = _num;
-        emit ResultUpdated(_num);
-    }
-
-    function setFee(uint256 _newFee) external onlyAdmin {
-        fee = _newFee;
-        emit FeeUpdated(_newFee);
-    }
-    
-    function setAdmin(address _newAdmin) external onlyAdmin {
-        if (_newAdmin == address(0)) revert InvalidAddress();
-        admin = _newAdmin;
-        emit AdminUpdated(_newAdmin);
+    function addition(uint256 _num1, uint256 _num2) external {
+        uint256 result = _num1 + _num2;
+        // Interaction with external contract
+        IResult(resultAddress).setResultado(result);
     }
 }
