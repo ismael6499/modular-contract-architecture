@@ -1,32 +1,32 @@
-# 🔗 Connected Smart Contracts: Inter-Contract Communication
+# 🔗 Connected Smart Contracts: Inter-Contract Communication & Auth Patterns
 
-Continuing my **Master in Blockchain Development** at **Blockchain Accelerator Academy**, this project moves beyond single-contract logic to explore **Composability** and **Contract Interaction**.
+Continuing my **Master in Blockchain Development** at **Blockchain Accelerator Academy**, this project explores **Composability** and advanced **Authentication Patterns** in the EVM.
 
-As a **Java Software Engineer**, I am used to dependency injection and defining behavior via Interfaces to keep systems modular. This project applies those same principles to the **EVM**, demonstrating how one smart contract can drive the state of another using the `interface` keyword.
+As a **Java Software Engineer**, I am accustomed to managing complex call chains. In this project, I implemented a modular architecture where contracts interact via interfaces, and I tackled the challenge of identifying the *original* user across multiple contract calls.
 
 ## 💡 Project Overview
 
-The goal is to separate logic (Calculation) from state (Storage) using three distinct files:
+The system creates a separation of concerns between Logic and Storage:
 
-1.  **`Result.sol` (The Database):** A simple contract that holds a state variable. It doesn't know *how* the result is calculated, it just stores it.
-2.  **`IResult.sol` (The API):** An Interface definition located in `interfaces/`. It acts as the contract's ABI definition, allowing other contracts to know which functions are available without needing the implementation logic.
-3.  **`Adder.sol` (The Controller):** This contract performs the addition logic. Instead of storing the result itself, it calls the `Result` contract via the `IResult` interface.
+1.  **`Result.sol` (The Database):** Stores the state and permission logic.
+2.  **`Adder.sol` (The Controller):** executes the addition logic and calls `Result` to save data.
+3.  **`IResult.sol` (The Interface):** Defines the contract ABI for interaction.
 
-### 🔍 Key Technical Concepts:
+### 🔍 Key Technical Features:
 
-* **Interfaces:** Just like in Java, defining an `interface` allows for decoupling. `Adder` doesn't need to import the full code of `Result`, only its signature.
-* **External Calls:** Using `IResult(address).function()` to execute code on a different address within the same transaction.
-* **Modularity:** This architecture mimics a microservices approach where specific contracts handle specific tasks (Logic vs. Storage).
+* **Global Transaction Origin (`tx.origin`):**
+    * [cite_start]I implemented authentication using `tx.origin` instead of `msg.sender`[cite: 4].
+    * **The Problem:** When `Adder` calls `Result`, the `msg.sender` seen by `Result` is the `Adder` contract, not the Admin.
+    * [cite_start]**The Solution:** By checking `tx.origin`, the `Result` contract verifies who *initiated* the transaction chain, allowing the Admin to execute restricted functions (like `setFee`) even when calling through the `Adder` contract[cite: 4, 28].
+* [cite_start]**Interface-Based Interaction:** usage of `IResult(address)` to decouple implementation from definition[cite: 25, 28].
+* [cite_start]**Modifiers for Access Control:** The `onlyAdmin` modifier acts as a guard, ensuring only the original transaction signer can alter sensitive state variables like `fee` or `admin`[cite: 4, 7, 9].
 
 ## 🛠️ Stack & Tools
 
 * **Language:** Solidity `^0.8.24`
-* **Architecture:** Interface-based interaction.
-* **Structure:**
-    * `interfaces/IResult.sol`
-    * `Adder.sol`
-    * `Result.sol`
+* **Architecture:** Modular (Logic/State separation)
+* **Security Concepts:** `tx.origin` vs `msg.sender`, Access Control.
 
 ---
 
-*This pattern is the fundamental building block of DeFi protocols, enabling "Money Legos" to interact seamlessly.*
+*This project demonstrates how to maintain identity context across a chain of smart contract interactions.*
