@@ -8,8 +8,34 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "newAdmin_",
+						"type": "address"
+					}
+				],
+				"name": "setAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
-						"name": "num",
+						"name": "newFee_",
+						"type": "uint256"
+					}
+				],
+				"name": "setFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "num_",
 						"type": "uint256"
 					}
 				],
@@ -47,11 +73,11 @@
 	},
 	"sources": {
 		"contracts/interfaces/IResult.sol": {
-			"keccak256": "0xe38cee328b84029fff17a8166a1ec9947922d5e7435e3c63b9edcfba99f12686",
+			"keccak256": "0x204158b1cf19a05cd27e2e26fcd635309a44084c4663d47c7831902b33a10d4d",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://44f51875acd296b190336b31e2c168b9a8f127929112d1772867099901355d5f",
-				"dweb:/ipfs/QmSBKKf1iPrkF9pu6BEZ7S3BdewQHCywxXdUCSCKnfezf4"
+				"bzz-raw://5b9910ff44f6fb85c9ed6aa23bf7919efeae89638cb5aaf8839ce786b0e6d088",
+				"dweb:/ipfs/QmfKjvanh8e3YJ4mNh4UTXckKFgPVeBiwD6znxD1816BfT"
 			]
 		}
 	},

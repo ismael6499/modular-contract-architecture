@@ -49,6 +49,8 @@
 		},
 		"gasEstimates": null,
 		"methodIdentifiers": {
+			"setAdmin(address)": "704b6c02",
+			"setFee(uint256)": "69fe0e2d",
 			"setResultado(uint256)": "7e0a7def"
 		}
 	},
@@ -56,8 +58,34 @@
 		{
 			"inputs": [
 				{
+					"internalType": "address",
+					"name": "newAdmin_",
+					"type": "address"
+				}
+			],
+			"name": "setAdmin",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "uint256",
-					"name": "num",
+					"name": "newFee_",
+					"type": "uint256"
+				}
+			],
+			"name": "setFee",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "num_",
 					"type": "uint256"
 				}
 			],

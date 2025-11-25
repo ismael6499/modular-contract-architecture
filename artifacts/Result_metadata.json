@@ -6,6 +6,43 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin_",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "admin",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "fee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "result",
 				"outputs": [
@@ -16,6 +53,32 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newAdmin_",
+						"type": "address"
+					}
+				],
+				"name": "setAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newFee_",
+						"type": "uint256"
+					}
+				],
+				"name": "setFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -60,11 +123,11 @@
 	},
 	"sources": {
 		"contracts/Result.sol": {
-			"keccak256": "0xc942e943e98a68e5a57389af7e8de41e5ec8b2cc5944ca059c3072f166619d97",
+			"keccak256": "0xbc13d5e01aed83c2b290ba698a342b686cca6f98b801aa36de99a4d75aa2d17d",
 			"license": "LGPL-3.0-only",
 			"urls": [
-				"bzz-raw://526bd68dea9d5ba14f127296386f36f3356b4325e6796da4af6ff78d2907a988",
-				"dweb:/ipfs/QmSZpmgp2QqzSo23qxEQP2BgFWAkN1drbBiMRcLVU1dN3F"
+				"bzz-raw://c918cc5bedc0d23fa173886950fff4a7ee8fa8b86640996ceaf7a7871628f4f6",
+				"dweb:/ipfs/QmT3VSuLgBE9fiYCtyerKUmXDUZePjSrV3v6qaWhBXrJUJ"
 			]
 		}
 	},

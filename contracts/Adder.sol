@@ -6,18 +6,9 @@ import "./interfaces/IResult.sol";
 contract Adder{
     
     address public resultAddress;
-    address public admin;
-    uint256 public fee;
 
-    modifier onlyAdmin() {
-        if(msg.sender != admin) revert();
-        _;
-    }
-
-    constructor(address resultAddress_, address admin_){
+    constructor(address resultAddress_){
         resultAddress = resultAddress_;
-        admin = admin_;
-        fee = 5;
     }
 
     function addition(uint256 num1_, uint256 num2_) external {
@@ -25,12 +16,7 @@ contract Adder{
         IResult(resultAddress).setResultado(result);
     }
 
-    function setFee(uint256 newFee_) external onlyAdmin {
-        fee = newFee_;
+    function setFee(uint256 newFee_) external  {
+        IResult(resultAddress).setFee(newFee_);
     }
-
-    function setAdmin(address newAdmin_) external onlyAdmin {
-        admin = newAdmin_;
-    }
-
 }
